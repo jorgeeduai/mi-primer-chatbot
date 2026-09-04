@@ -1,0 +1,162 @@
+:root {
+  --fondo: #0f1220;
+  --panel: #191d33;
+  --borde: #2a3052;
+  --tinta: #e8eaf6;
+  --tenue: #9aa3c7;
+  --acento: #7c5cff;
+  --acento2: #37c8a0;
+  --error: #ff7a7a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 20% -10%, #232a52 0%, var(--fondo) 55%);
+  color: var(--tinta);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.marco {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 18px 16px;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--acento), var(--acento2));
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cabecera h1 { margin: 0; font-size: 20px; }
+.cabecera .sub { margin: 2px 0 0; font-size: 13px; color: var(--tenue); }
+
+.reiniciar {
+  margin-left: auto;
+  background: transparent;
+  color: var(--tenue);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.reiniciar:hover { color: var(--tinta); border-color: var(--tenue); }
+
+.aviso {
+  margin-top: 12px;
+  background: #2b2138;
+  border: 1px solid #5b4a2f;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.aviso ol { margin: 8px 0 0; padding-left: 20px; }
+.aviso code { background: #00000055; padding: 1px 6px; border-radius: 6px; }
+
+.charla {
+  flex: 1;
+  overflow-y: auto;
+  margin: 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px;
+}
+
+.burbuja {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.burbuja .quien {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tenue);
+  margin-bottom: 4px;
+}
+
+.burbuja.bot {
+  align-self: flex-start;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-bottom-left-radius: 4px;
+}
+
+.burbuja.yo {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #5340d9, var(--acento));
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.burbuja.pensando { color: var(--tenue); font-style: italic; }
+
+.burbuja.error {
+  align-self: flex-start;
+  background: #33202a;
+  border: 1px solid #6b3b47;
+  color: var(--error);
+}
+
+.burbuja code { background: #00000055; padding: 1px 6px; border-radius: 6px; }
+
+.forma {
+  display: flex;
+  gap: 10px;
+}
+
+.forma input {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  color: var(--tinta);
+  padding: 14px 16px;
+  font-size: 15px;
+  outline: none;
+}
+.forma input:focus { border-color: var(--acento); }
+
+.forma button {
+  background: linear-gradient(135deg, var(--acento), #5340d9);
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  padding: 0 26px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.forma button:disabled { opacity: 0.5; cursor: wait; }

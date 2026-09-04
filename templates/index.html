@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ nombre }}</title>
+<link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+<main class="marco">
+  <header class="cabecera">
+    <div class="avatar" aria-hidden="true">{{ nombre[0]|upper }}</div>
+    <div>
+      <h1>{{ nombre }}</h1>
+      <p class="sub">tu bot, con la personalidad que tú le escribiste</p>
+    </div>
+    <button id="reiniciar" class="reiniciar" title="Borra la conversación">Reiniciar</button>
+  </header>
+
+  {% if not hay_llave %}
+  <section class="aviso">
+    <strong>Falta la llave del modelo.</strong>
+    <ol>
+      <li>Crea tu llave gratis en <code>aistudio.google.com</code> (Get API Key).</li>
+      <li>En Replit, abre <strong>Secrets</strong> (el candado del panel izquierdo).</li>
+      <li>Agrega una con el nombre <code>GEMINI_API_KEY</code> y pega ahí tu llave.</li>
+      <li>Detén el programa y vuelve a presionar <strong>Run</strong>.</li>
+    </ol>
+  </section>
+  {% endif %}
+
+  <section id="charla" class="charla" aria-live="polite">
+    <div class="burbuja bot">
+      <span class="quien">{{ nombre }}</span>
+      Hola. Pregúntame algo, y si no te gusta cómo contesto,
+      edita <code>personalidad.py</code>, guarda y vuelve a preguntar.
+    </div>
+  </section>
+
+  <form id="forma" class="forma" autocomplete="off">
+    <input id="pregunta" type="text" placeholder="Escribe tu pregunta..." maxlength="1000">
+    <button type="submit" id="enviar">Enviar</button>
+  </form>
+</main>
+
+<script>
+const charla = document.getElementById('charla');
+const forma = document.getElementById('forma');
+const campo = document.getElementById('pregunta');
+const enviar = document.getElementById('enviar');
+
+function burbuja(clase, quien, texto) {
+  const div = document.createElement('div');
+  div.className = 'burbuja ' + clase;
+  if (quien) {
+    const et = document.createElement('span');
+    et.className = 'quien';
+    et.textContent = quien;
+    div.appendChild(et);
+  }
+  div.appendChild(document.createTextNode(texto));
+  charla.appendChild(div);
+  charla.scrollTop = charla.scrollHeight;
+  return div;
+}
+
+forma.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const pregunta = campo.value.trim();
+  if (!pregunta) return;
+  campo.value = '';
+  burbuja('yo', null, pregunta);
+  const espera = burbuja('bot pensando', null, 'pensando...');
+  enviar.disabled = true;
+  try {
+    const r = await fetch('/preguntar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({pregunta})
+    });
+    const datos = await r.json();
+    espera.remove();
+    if (datos.error) {
+      burbuja('error', null, datos.error);
+    } else {
+      burbuja('bot', datos.nombre, datos.respuesta);
+    }
+  } catch (e) {
+    espera.remove();
+    burbuja('error', null, 'No hubo conexión con el programa. Revisa que siga corriendo.');
+  }
+  enviar.disabled = false;
+  campo.focus();
+});
+
+document.getElementById('reiniciar').addEventListener('click', async () => {
+  await fetch('/reiniciar', {method: 'POST'});
+  charla.innerHTML = '';
+  burbuja('bot', null, 'Conversación nueva. Pregúntame algo.');
+});
+</script>
+</body>
+</html>
